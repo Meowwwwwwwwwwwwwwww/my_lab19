@@ -62,15 +62,38 @@ void Unit::showStatus(){
 void Unit::newTurn(){
 	guard_on = false;
 }
+bool Unit::isDead(){
+	return hp <= 0;
+}
 
+void Unit::guard(){
+	guard_on = true;
+}
 
+int Unit::heal(){
+	int h = rand()%21 + 10;   // 10 - 30
+	if(hp + h > hpmax)
+		h = hpmax - hp;
+	hp += h;
+	return h;
+}
 
-/////////////////////////////////////////////////////////////////////////////////////
-//Write function members isDead(), guard(), heal(), beAttacked(), and attack() here//
-/////////////////////////////////////////////////////////////////////////////////////
+int Unit::beAttacked(int opp_atk){
+	int damage = opp_atk - def;
 
+	if(guard_on)
+		damage /= 3;
 
+	if(damage < 0)
+		damage = 0;
 
+	hp -= damage;
+	return damage;
+}
+
+int Unit::attack(Unit &u){
+	return u.beAttacked(atk);
+}
 void drawScene(char p_action,int p,char m_action,int m){
 	cout << "                                                       \n";
 	if(p_action == 'A'){
